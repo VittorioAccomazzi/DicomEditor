@@ -35,7 +35,7 @@ export default function AppResults (dcmInfo:AppResultParam) {
             await wait(safeDownloadDelay)
         })
 
-    },[setProgress])
+    },[setProgress,dcmInfo])
 
     return (
         <Container maxWidth='xl'>

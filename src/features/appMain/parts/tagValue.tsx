@@ -1,5 +1,5 @@
 
-import React, {useState,useEffect} from "react";
+import React, {useState} from "react";
 import { TextField } from "@material-ui/core";
 import DicomTagValue from "../../../dicom/DicomTagValue";
 

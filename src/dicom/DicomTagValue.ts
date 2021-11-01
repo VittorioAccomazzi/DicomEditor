@@ -1,4 +1,3 @@
-import { runInThisContext } from "vm";
 import { DicomTagDefinition } from "./DicomTags";
 
 
