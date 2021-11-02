@@ -5,7 +5,7 @@ import { Container } from '@material-ui/core';
 import AppHeader from './appHeader';
 import PatientList from './parts/patientList';
 import DicomEditor from '../../dicom/DicomEditor'
-import wait from '../../common/utils'
+import wait, { numberOfFiles } from '../../common/utils'
 
 const safeDownloadDelay=300
 type AppResultParam = DicomFilesInfo
@@ -45,7 +45,7 @@ export default function AppResults (dcmInfo:AppResultParam) {
                     <div>{`downloading ${progress.done}/${progress.total}`}</div>
                 </>:
                 <>
-                    <AppHeader numDicomFiles={dcmInfo.files.length} onDownload={onDownload} />
+                    <AppHeader numDicomFiles={numberOfFiles(dcmInfo.patients)} onDownload={onDownload} />
                     <PatientList patients={dcmInfo.patients}/>
                 </>
             }

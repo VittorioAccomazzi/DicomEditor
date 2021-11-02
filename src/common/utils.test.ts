@@ -1,6 +1,5 @@
 import wait from './utils'
 
-
 test('wait', async()=>{
     const now = ()=>(new Date()).getTime()
 
@@ -11,3 +10,4 @@ test('wait', async()=>{
 
     expect((end-start)-waitTime).toBeLessThanOrEqual(50) // error of 10%
 })
+    

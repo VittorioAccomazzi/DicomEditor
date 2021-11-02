@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import DicomEditor, { DicomFilesInfo, Progress } from '../../dicom/DicomEditor';
 import LinearProgressWithLabel from '../../components/linearProgressWithLabel';
 import AppResults from './appResults';
+import { numberOfFiles } from '../../common/utils';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -61,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
             setDicomFilesInfo(null)
             const progress  = (p:Progress)=>setProgress(p)
             const info = await DicomEditor.Extact(files, progress)
-            if( info.files.length>0 ) {
+            if( numberOfFiles(info.patients)>0 ) {
                 setDicomFilesInfo(info)
             } else {
                 setError(`The ${files.length} selected are not valid DICOM files`)

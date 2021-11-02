@@ -1,12 +1,12 @@
 import { FileWithPath } from "file-selector";
 import DicomEditor, { Progress } from "./DicomEditor";
 import * as fs from 'fs'
+import { numberOfFiles } from "../common/utils";
 
 const dcmjs = require("dcmjs");
-const { DicomMetaDictionary, DicomDict, DicomMessage } = dcmjs.data;
+const {  DicomMessage } = dcmjs.data;
 
 const dataFolder = 'src/dicom/testData/'
-
 const CT0 : FileWithPath = {
     lastModified: 0,
     name: dataFolder+"CT0.dcm",
@@ -25,9 +25,7 @@ const CT0 : FileWithPath = {
         throw new Error("Function not implemented.");
     }
 }
-
 const CT1 : FileWithPath = { ...CT0, name: dataFolder+"CT1.dcm" }
-
 const MR : FileWithPath  = { ...CT0,  name: dataFolder+"MR.dcm" }
 
 type onLoadCallbackType=((this: FileReader, ev: ProgressEvent<FileReader>) => any) | null
@@ -75,17 +73,19 @@ describe('DicomFilter', ()=>{
 
         let dcmInfo = await DicomEditor.Extact([CT0,CT1,MR], validateCallback)
 
-        expect(dcmInfo.files.length).toBe(3)
+        expect(numberOfFiles(dcmInfo.patients)).toBe(3)
         expect(dcmInfo.patients).toBeDefined()
         expect(dcmInfo.patients.length).toBe(2)
-        expect(dcmInfo.patients[0].files).toEqual([CT0,CT1])
-        expect(dcmInfo.patients[1].files).toEqual([MR])
+        expect(dcmInfo.patients[0].studies.length).toEqual(1)
+        expect(dcmInfo.patients[1].studies.length).toEqual(1)  
+        expect(dcmInfo.patients[0].studies[0].series[0].files).toEqual([CT0,CT1])
+        expect(dcmInfo.patients[1].studies[0].series[0].files).toEqual([MR])
         expect(callbackInvoked).toBe(3)
 
         const patientTg = '00100010'
         const modalityTg= '00080060'
-        const ctPatname = dcmInfo.patients[0].tagList.valueList.find(tag=>tag.dcmTag===patientTg)
-        const mrPatname = dcmInfo.patients[1].tagList.valueList.find(tag=>tag.dcmTag===patientTg)
+        const ctPatname = dcmInfo.patients[0].tags.valueList.find(tag=>tag.dcmTag===patientTg)
+        const mrPatname = dcmInfo.patients[1].tags.valueList.find(tag=>tag.dcmTag===patientTg)
 
         expect(ctPatname).toBeDefined()
         expect(mrPatname).toBeDefined()
@@ -97,7 +97,7 @@ describe('DicomFilter', ()=>{
         mrPatname!.setValue(mrNewName)
         let nModImages = 0
 
-        const callback = (image : ArrayBuffer, {done,total} : Progress)=>{
+        const callback = async (image : ArrayBuffer, {done,total} : Progress) =>{
             expect(done).toBeLessThanOrEqual(total)
             expect(total).toBe(3)
             const dcmDic = DicomMessage.readFile(image);
@@ -112,7 +112,6 @@ describe('DicomFilter', ()=>{
         await DicomEditor.Modify(dcmInfo, callback)
 
         expect(nModImages).toBe(3)
-
 
     },10000);
 })

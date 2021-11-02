@@ -103,3 +103,138 @@ const PatientTags : DicomTagDefinition[] = [
 ]
 
 export default PatientTags
+
+export const StudyTags : DicomTagDefinition[] = [
+    {
+        name : "Study Date",
+        tag : "00080020"
+    },
+    {
+        name : "Study Time",
+        tag : "00080030"
+    },
+    {
+        name : "Accession Number",
+        tag : "00080050"
+    },
+    {
+        name : "Referring Physician Name",
+        tag : "00080090"
+    },
+    {
+        name : "Consulting Physician Name",
+        tag : "0008009C"
+    },
+    {
+        name : "Study Description",
+        tag : "00081030"
+    },
+    {
+        name : "Physicians Of Record",
+        tag : "00081048"
+    },
+    {
+        name : "Name Of Physicians Reading Study",
+        tag : "00081060"
+    },
+    {
+        name : "StudyID",
+        tag : "00200010"
+    },
+    {
+        name : "Requesting Service",
+        tag : "00321033"
+    },
+    {
+        name : "Admitting Diagnoses Description",
+        tag : "00081080"
+    }
+]
+
+export const SeriesTags : DicomTagDefinition[] = [
+    {
+        name : "Series Date",
+        tag : "00080021"
+    },
+    {
+        name : "Series Time",
+        tag : "00080031"
+    },
+    {
+        name : "Modality",
+        tag : "00080060"
+    },
+    {
+        name : "Series Description",
+        tag : "0008103E"
+    },
+    {
+        name : "Performing Physician's Name",
+        tag : "00081050"
+    },
+    {
+        name : "Operators' Name",
+        tag : "00081070"
+    },
+    {
+        name : "Anatomical Orientation Type",
+        tag : "00102210",
+        enumeratedValues : ["BIPED","QUADRUPED"]
+    },
+    {
+        name : "Body Part Examined",
+        tag : "00180015"
+    },
+    {
+        name : "Protocol Name",
+        tag : "00181030"
+    },
+    {
+        name : "Patient Position",
+        tag : "00185100"
+    },
+    {
+        name : "Series Number",
+        tag : "00200011"
+    },
+    {
+        name : "Laterality",
+        tag : "00200060"
+    },
+    {
+        name : "Smallest Pixel Value in Series",
+        tag : "00280108"
+    },
+    {
+        name : "Largest Pixel Value in Series",
+        tag : "00280109"
+    },
+    {
+        name : "Performed Procedure Step Start Date",
+        tag : "00400244"
+    },
+    {
+        name : "Performed Procedure Step Start Time",
+        tag : "00400245"
+    },
+    {
+        name : "Performed Procedure Step End Date",
+        tag : "00400250"
+    },
+    {
+        name : "Performed Procedure Step End Time",
+        tag : "00400251"
+    },
+    {
+        name : "Performed Procedure Step ID",
+        tag : "00400253"
+    },
+    {
+        name : "Performed Procedure Step Description",
+        tag : "00400254"
+    },
+    {
+        name : "Comments on the Performed Procedure Step",
+        tag : "00400280"
+    }
+]
