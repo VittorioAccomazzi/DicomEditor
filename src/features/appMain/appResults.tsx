@@ -1,11 +1,13 @@
 
 import React,  { useCallback, useState }  from 'react'
 import { DicomFilesInfo, Progress } from '../../dicom/DicomEditor';
-import { Container } from '@material-ui/core';
+import { Container, Typography } from '@material-ui/core';
+import useStyle from '../../AppStyle'
 import AppHeader from './appHeader';
 import PatientList from './parts/patientList';
 import DicomEditor from '../../dicom/DicomEditor'
 import wait, { numberOfFiles } from '../../common/utils'
+import LinearProgressWithLabel from '../../components/linearProgressWithLabel';
 
 const safeDownloadDelay=300
 type AppResultParam = DicomFilesInfo
@@ -13,6 +15,7 @@ type AppResultParam = DicomFilesInfo
 export default function AppResults (dcmInfo:AppResultParam) {
     const [downloading, setDownloading]=useState<boolean>(false)
     const [progress, setProgress]=useState<Progress>({done:0, total:0})
+    const classes = useStyle()
 
     const onDownload = useCallback((replaceUID:boolean)=>{
         setDownloading(true)
@@ -42,7 +45,10 @@ export default function AppResults (dcmInfo:AppResultParam) {
             {
                 downloading ?
                 <>
-                    <div>{`downloading ${progress.done}/${progress.total}`}</div>
+                    <div className={classes.fullPage}>
+                        <Typography color='primary' variant='h2' className="text"> Processing ... </Typography>
+                        <LinearProgressWithLabel value={100*progress.done/progress.total} />
+                    </div>
                 </>:
                 <>
                     <AppHeader numDicomFiles={numberOfFiles(dcmInfo.patients)} onDownload={onDownload} />

@@ -35,6 +35,20 @@ const useStyles = makeStyles((theme) => ({
     topBottomPadding :{
         paddingBottom: theme.spacing(2),
         paddingTop: theme.spacing(2),
+    },
+    fullPage :  {    
+        position: 'absolute',
+        top : '0px',
+        left:'0px',  
+        width:'100%',
+        height:'100%',
+        borderWidth:'2px',
+        borderStyle: 'solid',
+        borderColor: theme.palette.primary.light,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
     }
 }))
 

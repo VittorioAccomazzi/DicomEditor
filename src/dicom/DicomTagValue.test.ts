@@ -18,6 +18,11 @@ const tagDefVals : DicomTagDefinition = {
     enumeratedValues : ["BAD","GOOD"]
 }
 
+const tagDef3 : DicomTagDefinition = {
+    name : "Tag Name",
+    tag : "00010007"
+}
+
 test('it shall report correct name and value',()=>{
     const tagValue = 'Value Tag 1'
     const tv = new DicomTagValue(tagDef1, 'CS', tagValue)
@@ -38,6 +43,9 @@ test('shall able to compare tags',()=>{
     expect(tv3.isSame(tv1)).toBeFalsy()
     expect(tv1.isSame(tv4)).toBeFalsy()
     expect(tv4.isSame(tv1)).toBeFalsy()
+
+    expect(tv1.isHidden).toBeFalsy()
+    expect(tv2.isHidden).toBeFalsy()
 })
 
 test('shall validate when setting the value', ()=>{
@@ -84,4 +92,17 @@ test('shall track modified values',()=>{
     expect(resEnu).toBeTruthy()
     expect(tagEnu.isModified).toBeTruthy()
 
+})
+
+test('Shall validate Dicom tags',()=>{
+    const tagDs = new DicomTagValue(tagDef3,'DS','001')
+
+    // invalid character
+    expect(tagDs.setValue('128s')).toBeFalsy()
+
+    // inavalid len
+    expect(tagDs.setValue('918298291201820218')).toBeFalsy()
+
+    // valid set
+    expect(tagDs.setValue('128')).toBeTruthy()
 })
