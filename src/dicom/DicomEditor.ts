@@ -2,9 +2,8 @@ import { FileWithPath } from "file-selector";
 import { foreachSeries, numberOfFiles } from "../common/utils";
 import DicomTagList from "./DicomTagList";
 import PatientTags, { SeriesTags, StudyTags } from "./DicomTags";
-
-const dcmjs = require("dcmjs");
-const { DicomMessage } = dcmjs.data;
+import DicomDataset from "./DicomDataset";
+import DicomUidReplacer from "./DicomUIDReplacer";
 
 export interface Progress {
     done : number,
@@ -28,6 +27,10 @@ export interface DicomFilesInfo {
 export type ProgressCallback = ( progress : Progress ) => void
 export type DownloadCallback = ( image : ArrayBuffer, progress : Progress ) => Promise<void>
 
+const studyUIDTag   = '0020000D'
+const seriesUIDTag  = '0020000E'
+const mediaStUIDTag = '00020003'
+const instanceUIDTag= '00080018'
 export default class DicomEditor {
 
     /**
@@ -45,10 +48,10 @@ export default class DicomEditor {
         for( let f=0; f<files.length; f++ ){
             let data = await this.readFile(files[f])
             if( this.sanityCheck(data)){
-                const dcm = DicomMessage.readFile(data);
-                const pat = new DicomTagList(dcm.dict, PatientTags)
-                const stu = new DicomTagList(dcm.dict, StudyTags)
-                const ser = new DicomTagList(dcm.dict, SeriesTags)
+                const dcm = new DicomDataset(data)
+                const pat = new DicomTagList(dcm, PatientTags)
+                const stu = new DicomTagList(dcm, StudyTags)
+                const ser = new DicomTagList(dcm, SeriesTags)
                 this.add(patients, pat, stu, ser, files[f])
             }
             progress({ done:f+1, total:files.length})
@@ -60,23 +63,37 @@ export default class DicomEditor {
     /**
      * Modifies the file based on the input tag set
      * @param info tags definition, which will include the modification which needs to be done.
+     * @param replaceUID true if all the UIDs needs to be replaced
      * @param progress callback which will report the image generated and also he progress
      */
-    static async Modify( info : DicomFilesInfo, progress : DownloadCallback ) : Promise<void> {
+    static async Modify( info : DicomFilesInfo, replaceUID: boolean, progress : DownloadCallback ) : Promise<void> {
+        const repUID= new DicomUidReplacer()
         const total = numberOfFiles(info.patients)
         let count=0
         for( const {patient, study, series } of foreachSeries(info.patients)){
             for( const file of series.files) {
                 const data = await this.readFile(file)
-                const dcmD = DicomMessage.readFile(data);
-                patient.tags.Modify(dcmD.dict)
-                study.tags.Modify(dcmD.dict)
-                series.tags.Modify(dcmD.dict)
-                const outB = dcmD.write() as ArrayBuffer
+                const dcm  = new DicomDataset(data);
+                patient.tags.Modify(dcm)
+                study.tags.Modify(dcm)
+                series.tags.Modify(dcm)
+                if( replaceUID ) DicomEditor.replaceUIDs(dcm, repUID);
+                const outB = dcm.write()
                 await progress(outB, {total, done:++count})
             }
         }
     } 
+
+    private static replaceUIDs(dcm: DicomDataset, repUID: DicomUidReplacer) {
+        const studyUID = dcm.get(studyUIDTag)!.Value[0].toString();
+        const seriesUID = dcm.get(seriesUIDTag)!.Value[0].toString();
+        const instanceUID = dcm.get(instanceUIDTag)!.Value[0].toString();
+        const newUIDs = repUID.replace({ studyUID, seriesUID, instanceUID });
+        dcm.set(studyUIDTag, newUIDs.studyUID);
+        dcm.set(seriesUIDTag, newUIDs.seriesUID);
+        dcm.set(instanceUIDTag, newUIDs.instanceUID);
+        dcm.set(mediaStUIDTag, newUIDs.instanceUID )
+    }
 
     private static add( patients : PatientInfo[], pat : DicomTagList, stu : DicomTagList, ser : DicomTagList,  file : FileWithPath  ){
         let patient = patients.find(p=>p.tags.isEqual(pat))

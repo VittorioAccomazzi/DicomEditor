@@ -1,6 +1,31 @@
+import { cleanup } from '@testing-library/react';
+import DicomDataset from './DicomDataset'
 import DicomTagList from  './DicomTagList'
 import { DicomTagDefinition } from './DicomTags';
 
+jest.mock('./dicomDataset',()=>{
+    return jest.fn().mockImplementation((dataset)=>{
+        return {
+            get: jest.fn().mockImplementation((tag)=>{
+                return dataset[tag]
+            }),
+            set : ()=> {throw Error('set not implemented')},
+            write:()=>{throw Error('writte not implemented')}
+        }
+    });
+});
+
+
+beforeEach(() => {
+    // setup a DOM element as a render target
+  });
+  
+  afterEach(()=>{
+    cleanup()
+    jest.clearAllMocks()
+  })
+  
+  
 
 const tagDefinition : DicomTagDefinition [] = [
     {
@@ -70,9 +95,13 @@ const dataset3 = {
 
 test('Shall deteermine if two lists are the same', () => {
 
-    const list1 = new DicomTagList(dataset1, tagDefinition)
-    const list2 = new DicomTagList(dataset2, tagDefinition)
-    const list3 = new DicomTagList(dataset3, tagDefinition)
+    const dcm1 = new DicomDataset(dataset1 as any)
+    const dcm2 = new DicomDataset(dataset2 as any)
+    const dcm3 = new DicomDataset(dataset3 as any)
+
+    const list1 = new DicomTagList(dcm1, tagDefinition)
+    const list2 = new DicomTagList(dcm2, tagDefinition)
+    const list3 = new DicomTagList(dcm3, tagDefinition)
 
     const same12 = list1.isEqual(list2)
     const same21 = list2.isEqual(list1)  
@@ -89,7 +118,8 @@ test('Shall deteermine if two lists are the same', () => {
   });
 
   test('it shall return the correct values', ()=>{
-    const list = new DicomTagList(dataset1, tagDefinition)
+    const dcm1 = new DicomDataset(dataset1 as any)
+    const list = new DicomTagList(dcm1, tagDefinition)
     const expected = [
         {name:'test1',value: 'value test1'},
         {name:'test2',value: 'value test2'}   

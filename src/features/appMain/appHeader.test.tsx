@@ -13,6 +13,8 @@ afterEach(()=>{
 })
 
 test('rendering',()=>{
-    const {container} =  render(<AppHeader numDicomFiles={50}/>)
+    const onDownload = ()=> { throw new Error('Function not implemented.');}
+
+    const {container} =  render(<AppHeader numDicomFiles={50} onDownload={onDownload}/>)
     expect(container.innerHTML).toMatchSnapshot()
 })

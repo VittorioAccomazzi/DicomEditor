@@ -20,7 +20,7 @@ export default function AppResults (dcmInfo:AppResultParam) {
     const onDownload = useCallback((replaceUID:boolean)=>{
         setDownloading(true)
         const cleanUp=(url:string) => setTimeout(()=>URL.revokeObjectURL(url),1000)
-        DicomEditor.Modify(dcmInfo, async (image:ArrayBuffer, progress : Progress )=>{
+        DicomEditor.Modify(dcmInfo, replaceUID,  async (image:ArrayBuffer, progress : Progress )=>{
             var blob = new Blob([image], {type: 'application/octet-stream'});
             const bURL = URL.createObjectURL(blob)
             let link = document.createElement('a') 

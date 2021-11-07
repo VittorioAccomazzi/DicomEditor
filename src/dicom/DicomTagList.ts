@@ -1,3 +1,4 @@
+import DicomDataset from "./DicomDataset";
 import { DicomTagDefinition } from "./DicomTags";
 import DicomTagValue from "./DicomTagValue";
 
@@ -6,10 +7,10 @@ export default class DicomTagList {
 
     private list : DicomTagValue[]
 
-    constructor( dict : any, tags : DicomTagDefinition[] )  {
+    constructor( dcm: DicomDataset, tags : DicomTagDefinition[] )  {
         this.list = []
         tags.forEach( tag =>{
-            let val = dict[tag.tag]
+            let val = dcm.get(tag.tag)
             if( val && val.Value && val.Value.length > 0 ) this.list.push( new DicomTagValue(tag, val.vr, val.Value[0].toString()))
         })
     }
@@ -27,11 +28,10 @@ export default class DicomTagList {
         return iseq 
     }
 
-    public Modify( dict : any ){
-
+    public Modify( dcm: DicomDataset ){
         for( const valueTag of this.valueList ) {
-            if( valueTag.isModified ){
-                dict[valueTag.dcmTag].Value[0] = valueTag.value
+            if( valueTag.isModified ) {
+                dcm.set(valueTag.dcmTag, valueTag.value)
             }
         }
     }

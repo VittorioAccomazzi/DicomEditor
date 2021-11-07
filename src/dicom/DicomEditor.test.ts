@@ -2,14 +2,14 @@ import { FileWithPath } from "file-selector";
 import DicomEditor, { Progress } from "./DicomEditor";
 import * as fs from 'fs'
 import { numberOfFiles } from "../common/utils";
+import  { PathCT0, PathCT1, PathMR } from "../common/testUtils";
 
 const dcmjs = require("dcmjs");
 const {  DicomMessage } = dcmjs.data;
 
-const dataFolder = 'src/dicom/testData/'
 const CT0 : FileWithPath = {
     lastModified: 0,
-    name: dataFolder+"CT0.dcm",
+    name: PathCT0,
     size: 0,
     type: 'file',
     arrayBuffer: function (): Promise<ArrayBuffer> {
@@ -25,8 +25,8 @@ const CT0 : FileWithPath = {
         throw new Error("Function not implemented.");
     }
 }
-const CT1 : FileWithPath = { ...CT0, name: dataFolder+"CT1.dcm" }
-const MR : FileWithPath  = { ...CT0,  name: dataFolder+"MR.dcm" }
+const CT1 : FileWithPath = { ...CT0, name: PathCT1 }
+const MR : FileWithPath  = { ...CT0,  name: PathMR }
 
 type onLoadCallbackType=((this: FileReader, ev: ProgressEvent<FileReader>) => any) | null
 
@@ -109,7 +109,7 @@ describe('DicomFilter', ()=>{
             nModImages++
         }
 
-        await DicomEditor.Modify(dcmInfo, callback)
+        await DicomEditor.Modify(dcmInfo, false, callback)
 
         expect(nModImages).toBe(3)
 
