@@ -1,9 +1,10 @@
 import { FileWithPath } from "file-selector";
-import { foreachSeries, numberOfFiles } from "../common/utils";
+import { fixDigit, foreachSeries, numberOfFiles } from "../common/utils";
 import DicomTagList from "./DicomTagList";
 import PatientTags, { SeriesTags, StudyTags } from "./DicomTags";
 import DicomDataset from "./DicomDataset";
 import DicomUidReplacer from "./DicomUIDReplacer";
+import JSZip from "jszip";
 
 export interface Progress {
     done : number,
@@ -25,7 +26,8 @@ export interface DicomFilesInfo {
     patients : PatientInfo[]
 }
 export type ProgressCallback = ( progress : Progress ) => void
-export type DownloadCallback = ( image : ArrayBuffer, progress : Progress ) => Promise<void>
+export type ProcessStages    = 'processing' | 'zipping'
+export type ProcessCallback  = ( type : ProcessStages, progress : Progress) => void
 
 const studyUIDTag   = '0020000D'
 const seriesUIDTag  = '0020000E'
@@ -66,11 +68,13 @@ export default class DicomEditor {
      * @param replaceUID true if all the UIDs needs to be replaced
      * @param progress callback which will report the image generated and also he progress
      */
-    static async Modify( info : DicomFilesInfo, replaceUID: boolean, progress : DownloadCallback ) : Promise<void> {
+    static async Modify( info : DicomFilesInfo, replaceUID: boolean, progress : ProcessCallback ) : Promise<ArrayBuffer> {
+        const zip = new JSZip()
         const repUID= new DicomUidReplacer()
         const total = numberOfFiles(info.patients)
         let count=0
-        for( const {patient, study, series } of foreachSeries(info.patients)){
+        for( const {patient, study, series, patIndex, stuIndex, serindex } of foreachSeries(info.patients)){
+            let imgIndex =0
             for( const file of series.files) {
                 const data = await this.readFile(file)
                 const dcm  = new DicomDataset(data);
@@ -78,11 +82,24 @@ export default class DicomEditor {
                 study.tags.Modify(dcm)
                 series.tags.Modify(dcm)
                 if( replaceUID ) DicomEditor.replaceUIDs(dcm, repUID);
+                imgIndex++
                 const outB = dcm.write()
-                await progress(outB, {total, done:++count})
+                const filename = this.imageFilename(patIndex, stuIndex, serindex, imgIndex)
+                zip.file(filename, outB, {binary:true,createFolders:true})
+                await progress( 'processing', {total, done:++count})
             }
         }
+        const zipFile = await zip.generateAsync({type:'arraybuffer'},(meta)=>{
+            progress('zipping', {total:100, done : meta.percent })
+        })
+        return zipFile
     } 
+    static imageFilename(patIndex: number, stuIndex: number, serindex: number, imgIndex: number) {
+        return 'PAT'+fixDigit(patIndex,2)+'/'+
+               'STU'+fixDigit(stuIndex,2)+'/'+
+               'SER'+fixDigit(serindex,3)+'/'+
+               'IMG'+fixDigit(imgIndex,5)+'.dcm'
+    }
 
     private static replaceUIDs(dcm: DicomDataset, repUID: DicomUidReplacer) {
         const studyUID = dcm.get(studyUIDTag)!.Value[0].toString();

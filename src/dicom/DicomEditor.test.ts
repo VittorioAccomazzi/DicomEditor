@@ -1,8 +1,9 @@
 import { FileWithPath } from "file-selector";
-import DicomEditor, { Progress } from "./DicomEditor";
+import DicomEditor, { ProcessStages, Progress } from "./DicomEditor";
 import * as fs from 'fs'
-import { numberOfFiles } from "../common/utils";
+import { foreachSeries, numberOfFiles } from "../common/utils";
 import  { PathCT0, PathCT1, PathMR } from "../common/testUtils";
+import JSZip from "jszip";
 
 const dcmjs = require("dcmjs");
 const {  DicomMessage } = dcmjs.data;
@@ -96,22 +97,41 @@ describe('DicomFilter', ()=>{
         ctPatname!.setValue(ctNewName)
         mrPatname!.setValue(mrNewName)
         let nModImages = 0
+        let zipDone    =0
+        const callback = (mode : ProcessStages, {done,total} : Progress) =>{
+            if( mode == 'processing'){
+                expect(done).toBeLessThanOrEqual(total)
+                expect(total).toBe(3)
+                nModImages++
+            }
+            if( mode === 'zipping'){
+                zipDone = done
+            }
+        }
 
-        const callback = async (image : ArrayBuffer, {done,total} : Progress) =>{
-            expect(done).toBeLessThanOrEqual(total)
-            expect(total).toBe(3)
+        const zipBuffer = await DicomEditor.Modify(dcmInfo, false, callback)
+        expect(zipBuffer).toBeDefined()
+        expect(zipDone).toBe(100)
+
+        let zip = new JSZip()
+        zip = await zip.loadAsync( new Uint8Array(zipBuffer ))
+
+        let nImages = 0
+        for( const filename in zip.files ){
+            const zipEntry = zip.file(filename)!
+            if(!zipEntry) continue
+            const image = await zipEntry.async('arraybuffer')
             const dcmDic = DicomMessage.readFile(image);
             const modality = dcmDic.dict[modalityTg].Value[0]
             const patname  = dcmDic.dict[patientTg].Value[0]
             expect(['CT','MR'].includes(modality)).toBeTruthy()
             if(modality==='CT') expect(patname).toBe(ctNewName)
             if(modality==='MR') expect(patname).toBe(mrNewName)
-            nModImages++
+            nImages++
         }
 
-        await DicomEditor.Modify(dcmInfo, false, callback)
-
         expect(nModImages).toBe(3)
+        expect(nImages).toBe(3)
 
-    },10000);
+    },60*1000);
 })
