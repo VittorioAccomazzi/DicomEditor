@@ -12,7 +12,6 @@ The application is available on line here:
 - The ammount of data to process is only limited by the memory of the browser. On my mac I can easily process thousands of images. The implementation minimizes the memory usage.
 
 ## Limitations
-- When downloading the images, the system is slow: about 3 images/sec. Unfortunately, this is a limitation due to the browser. Chrome will not be able to download images faster (I tested)
 - Currently editing of DICOM tags in seqences is not supported.
 - I rely on the DICOM parsing to [dcmjs](https://github.com/dcmjs-org/dcmjs), which is still under work. Therefore, you might run in some limitation/bug.
 
