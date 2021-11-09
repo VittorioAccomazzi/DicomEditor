@@ -118,17 +118,22 @@ export default class DicomEditor {
             patient = { tags : pat, studies : [] }
             patients.push(patient)
         }
+        patient.tags.Merge(pat)
+
         let study = patient.studies.find(s=>s.tags.isEqual(stu))
         if(!study){
             study= {tags : stu, series: []}
             patient.studies.push(study)
         }
+        study.tags.Merge(stu)
+
         let series=study.series.find(s=>s.tags.isEqual(ser))
         if(!series){
             series = {tags:ser, files:[]}
             study.series.push(series)
         }
         series.files.push(file)
+        series.tags.Merge(ser)
     }
 
     private static async  readFile ( file : FileWithPath ) : Promise<ArrayBuffer> {

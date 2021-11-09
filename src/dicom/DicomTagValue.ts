@@ -97,40 +97,69 @@ const vrConstrains : vrConstrain [] =[
 
 ]
 
-
-
 export default class DicomTagValue {
 
     private tag : DicomTagDefinition
     private val : string
     private vr  : string
     private org : string
+    private other : string []
 
     constructor( tag : DicomTagDefinition, vr : string, val : string ){
         this.tag=tag
         this.val=val
         this.org=val
         this.vr=vr
+        this.other=[]
     }   
 
+    /**
+     * Dicom Tag name
+     */
     public get name() : string {
         return this.tag.name
     }
 
+    /**
+     * Dicom Tag Value
+     */
     public get value() : string {
         return this.val
     }
 
+    /**
+     * true if the value has been set after creation
+     */
     public get isModified(): boolean {
         return this.org !== this.val
     }
 
+    /**
+     * false if needs to be displayed to the user
+     */
     public get isHidden() : boolean {
         return this.tag.hide || false
     }
 
+    /**
+     * true if required to compare two sets of tags
+     */
+    public get isCompare() : boolean {
+        return this.tag.compare || false
+    }
+
+    /**
+     * Dicom tag
+     */
     public get dcmTag() : string {
         return this.tag.tag
+    }
+
+    /**
+     * returns other tag values seen on this tag.
+     */
+    public get otherValues() : string [] {
+            return this.other;
     }
 
     public isSame(other:DicomTagValue) : boolean {
@@ -165,6 +194,10 @@ export default class DicomTagValue {
         }
         if( doSet ) this.val = value
         return doSet
+    }
+
+    public addOtherValue(val:string) {
+        if( !this.other.includes(val)) this.other.push(val)
     }
 
 }

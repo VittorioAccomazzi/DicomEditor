@@ -30,7 +30,8 @@ beforeEach(() => {
 const tagDefinition : DicomTagDefinition [] = [
     {
         name : "test1",
-        tag :  "00010000"
+        tag :  "00010000",
+        compare: true
     },
     {
         name : "test2",
@@ -79,7 +80,7 @@ const dataset2 = {
 const dataset3 = {
     '00010000' : {
         vr : 'CS',
-        Value : ["value test1"]
+        Value : ["value test different"]
     },
     '00020000' :
     {
@@ -90,6 +91,23 @@ const dataset3 = {
     {
         vr : 'CS',
         Value : ["value test9"]
+    }
+}
+
+const dataset4 = {
+    '00010000' : {
+        vr : 'CS',
+        Value : ["value test1"]
+    },
+    '00020000' :
+    {
+        vr : 'CS',
+        Value : ["value test3"]
+    },
+    '00030000' : 
+    {
+        vr : 'CS',
+        Value : ["value test8"]
     }
 }
 
@@ -129,3 +147,25 @@ test('Shall deteermine if two lists are the same', () => {
 
   })
   
+  test('shall merge properly',()=>{
+    const dcm1 = new DicomDataset(dataset1 as any)
+    const dcm2 = new DicomDataset(dataset4 as any)
+
+    const list1 = new DicomTagList(dcm1, tagDefinition)
+    const list2 = new DicomTagList(dcm2, tagDefinition)  
+
+    expect(list1.valueList.length).toBe(2)
+    expect(list2.valueList.length).toBe(3)
+
+    list1.Merge(list2)
+    expect(list1.valueList.length).toBe(3)
+
+    expect(list1.valueList.find(v=>v.dcmTag===tagDefinition[0].tag)).toBeDefined()
+    expect(list1.valueList.find(v=>v.dcmTag===tagDefinition[0].tag)?.otherValues).toStrictEqual([])
+    expect(list1.valueList.find(v=>v.dcmTag===tagDefinition[1].tag)).toBeDefined()
+    expect(list1.valueList.find(v=>v.dcmTag===tagDefinition[1].tag)?.otherValues).toStrictEqual(dataset4['00020000'].Value)
+    expect(list1.valueList.find(v=>v.dcmTag===tagDefinition[2].tag)).toBeDefined()
+    expect(list1.valueList.find(v=>v.dcmTag===tagDefinition[2].tag)?.otherValues).toStrictEqual([])
+    expect(list1.valueList.find(v=>v.dcmTag===tagDefinition[2].tag)?.value).toBe(dataset4['00030000'].Value[0])
+
+  })

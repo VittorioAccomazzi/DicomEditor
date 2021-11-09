@@ -3,16 +3,19 @@ export interface DicomTagDefinition {
     tag : string
     enumeratedValues? : string []
     hide? : boolean
+    compare? : boolean
 }
 
 const PatientTags : DicomTagDefinition[] = [
     {
         name : "Patient Name",
-        tag : "00100010"
+        tag : "00100010",
+        compare : true
     },
     {
         name : "Patient ID",
-        tag : "00100020"
+        tag : "00100020",
+        compare : true
     },
     {
         name : "Other Patient IDs",
@@ -153,7 +156,8 @@ export const StudyTags : DicomTagDefinition[] = [
     {
         name : "Study Instance UID",
         tag : "0020000D",
-        hide : true
+        hide : true,
+        compare: true
     }
 ]
 
@@ -246,6 +250,7 @@ export const SeriesTags : DicomTagDefinition[] = [
     {
         name : "Series Instance UID",
         tag : "0020000E",
-        hide: true
+        hide: true,
+        compare:true
     }
 ]

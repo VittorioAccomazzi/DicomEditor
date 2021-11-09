@@ -106,3 +106,14 @@ test('Shall validate Dicom tags',()=>{
     // valid set
     expect(tagDs.setValue('128')).toBeTruthy()
 })
+
+test('test case with tage with multiple value',()=>{
+    const value1 = 'string value'
+    const value2 = 'value 2'
+    const tagMv = new DicomTagValue(tagDef1,'CS',value1)
+
+    tagMv.addOtherValue(value2)
+    expect(tagMv.isModified).toBeFalsy()
+    expect(tagMv.value).toBe(value1)
+    expect(tagMv.otherValues).toStrictEqual([value2])
+})

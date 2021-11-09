@@ -85,8 +85,11 @@ describe('DicomFilter', ()=>{
 
         const patientTg = '00100010'
         const modalityTg= '00080060'
+        const studyUIDTg= '0020000D'
         const ctPatname = dcmInfo.patients[0].tags.valueList.find(tag=>tag.dcmTag===patientTg)
         const mrPatname = dcmInfo.patients[1].tags.valueList.find(tag=>tag.dcmTag===patientTg)
+        const ctStudyUID= dcmInfo.patients[0].studies[0].tags.valueList.find(tag=>tag.dcmTag===studyUIDTg)
+        const mrStudyUID= dcmInfo.patients[1].studies[0].tags.valueList.find(tag=>tag.dcmTag===studyUIDTg)
 
         expect(ctPatname).toBeDefined()
         expect(mrPatname).toBeDefined()
@@ -109,7 +112,7 @@ describe('DicomFilter', ()=>{
             }
         }
 
-        const zipBuffer = await DicomEditor.Modify(dcmInfo, false, callback)
+        const zipBuffer = await DicomEditor.Modify(dcmInfo, true, callback)
         expect(zipBuffer).toBeDefined()
         expect(zipDone).toBe(100)
 
@@ -124,9 +127,17 @@ describe('DicomFilter', ()=>{
             const dcmDic = DicomMessage.readFile(image);
             const modality = dcmDic.dict[modalityTg].Value[0]
             const patname  = dcmDic.dict[patientTg].Value[0]
+            const studyUID = dcmDic.dict[studyUIDTg].Value[0]
             expect(['CT','MR'].includes(modality)).toBeTruthy()
-            if(modality==='CT') expect(patname).toBe(ctNewName)
-            if(modality==='MR') expect(patname).toBe(mrNewName)
+            if(modality==='CT') { 
+                expect(patname).toBe(ctNewName)
+                expect(studyUID).not.toBe(ctStudyUID)
+            }
+            if(modality==='MR') { 
+                expect(patname).toBe(mrNewName)
+                expect(studyUID).not.toBe(mrStudyUID)
+            }
+
             nImages++
         }
 

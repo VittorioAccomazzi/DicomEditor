@@ -33,6 +33,10 @@ export default class DicomDataset {
         }
     }
 
+    public has(tag:string) : boolean {
+        return this.getDict(tag)[tag] != null
+    }
+
     public write() {
         return this.dataset.write() as ArrayBuffer
     }

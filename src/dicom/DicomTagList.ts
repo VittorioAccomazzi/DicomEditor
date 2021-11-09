@@ -20,9 +20,11 @@ export default class DicomTagList {
     }
 
     public isEqual( other : DicomTagList ) : boolean {
-        let iseq = other.list.length === this.list.length
+        const thisList = this.list.filter(v=>v.isCompare)
+        const otherList= other.list.filter(v=>v.isCompare)
+        let iseq = otherList.length === thisList.length
         if( iseq ){
-            let res =  this.list.map((val)=> other.list.find((oVal)=>oVal.isSame(val)))
+            let res =  thisList.map((val)=> otherList.find((oVal)=>oVal.isSame(val)))
             iseq = !res.some((v)=> !v)
         }
         return iseq 
@@ -30,10 +32,24 @@ export default class DicomTagList {
 
     public Modify( dcm: DicomDataset ){
         for( const valueTag of this.valueList ) {
-            if( valueTag.isModified ) {
+            if( valueTag.isModified && dcm.has(valueTag.dcmTag) ) {
                 dcm.set(valueTag.dcmTag, valueTag.value)
             }
         }
+    }
+
+    public Merge(other:DicomTagList) : void {
+        other.list.forEach(val=>{
+            let el = this.list.find(v=>v.dcmTag===val.dcmTag)
+            if( el ){
+                if( el.value !== val.value) {
+                    el.addOtherValue(val.value) // track that there is a another value for this tag.
+                }
+            } else {
+                // not present and so we need to insert it
+                this.list.push(val)
+            }
+        })
     }
 
 }
