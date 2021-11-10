@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.js": "/DicomEditor/static/js/main.ee44b15c.chunk.js",
-    "main.js.map": "/DicomEditor/static/js/main.ee44b15c.chunk.js.map",
+    "main.js": "/DicomEditor/static/js/main.d2c5c989.chunk.js",
+    "main.js.map": "/DicomEditor/static/js/main.d2c5c989.chunk.js.map",
     "runtime-main.js": "/DicomEditor/static/js/runtime-main.2aa92d90.js",
     "runtime-main.js.map": "/DicomEditor/static/js/runtime-main.2aa92d90.js.map",
-    "static/js/2.c03a96e1.chunk.js": "/DicomEditor/static/js/2.c03a96e1.chunk.js",
-    "static/js/2.c03a96e1.chunk.js.map": "/DicomEditor/static/js/2.c03a96e1.chunk.js.map",
+    "static/js/2.38a32756.chunk.js": "/DicomEditor/static/js/2.38a32756.chunk.js",
+    "static/js/2.38a32756.chunk.js.map": "/DicomEditor/static/js/2.38a32756.chunk.js.map",
     "index.html": "/DicomEditor/index.html",
-    "static/js/2.c03a96e1.chunk.js.LICENSE.txt": "/DicomEditor/static/js/2.c03a96e1.chunk.js.LICENSE.txt"
+    "static/js/2.38a32756.chunk.js.LICENSE.txt": "/DicomEditor/static/js/2.38a32756.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.2aa92d90.js",
-    "static/js/2.c03a96e1.chunk.js",
-    "static/js/main.ee44b15c.chunk.js"
+    "static/js/2.38a32756.chunk.js",
+    "static/js/main.d2c5c989.chunk.js"
   ]
 }
