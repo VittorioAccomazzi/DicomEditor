@@ -4,7 +4,7 @@ The aim of this application is to create a web page which allows to change the D
 This is *not* an anonymizer ad shall not be used as such. There are a number of TAG which might contain PHI that are not necessarily displayed by the application. 
 
 The application is available on line here:
- 🖐 To do !!
+[https://vittorioaccomazzi.github.io/DicomEditor](https://vittorioaccomazzi.github.io/DicomEditor)
 
 ## Key features
 - All the processing is local on our browser. Images are not uploaded nor processed anywhere.

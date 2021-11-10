@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
             if( numberOfFiles(info.patients)>0 ) {
                 setDicomFilesInfo(info)
             } else {
-                setError(`The ${files.length} selected are not valid DICOM files`)
+                setError(`The ${files.length} file selected are not valid DICOM files`)
             }
             setProgress({done:0,total:0})
         }, [setError, setProgress]) 
@@ -102,8 +102,8 @@ const useStyles = makeStyles((theme) => ({
                                         <></>
                                     }   
                                     <>
-                                        <Typography className="text">Drag and Drop here your DICOM file.</Typography>
-                                        <Typography className="text">or click here to select the file.</Typography>
+                                        <Typography className="text">Drag and Drop here your DICOM files or folders here.</Typography>
+                                        <Typography className="text">or click here to select the files.</Typography>
                                     </>
                                 </div> 
                             }
