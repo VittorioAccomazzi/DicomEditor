@@ -25,7 +25,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "ts-node src/Tools/gitInfo.mjs && react-scripts build",
     "test": "react-scripts test"
   },
   "eslintConfig": {
@@ -45,5 +45,10 @@
   },
   "jest": {
     "resetMocks": false
+  },
+  "devDependencies": {
+    "@types/child-process-promise": "^2.2.2",
+    "child-process-promise": "^2.2.1",
+    "ts-node": "^10.4.0"
   }
 }

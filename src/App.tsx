@@ -12,7 +12,9 @@ import {
 import {
   MuiThemeProvider,
   CssBaseline,
+  Hidden,
 } from "@material-ui/core";
+import AppVersion from "./features/appVersion/appVersion";
 
 
 const theme = createTheme({
@@ -53,6 +55,9 @@ const App = ({ classes }: AppProps) => (
       <div className={classes.main}>
         <AppMain />
       </div>
+      <Hidden smDown >
+        <AppVersion label="version : " forkme={true} baseURL="https://github.com/VittorioAccomazzi/DicomEditor" />
+      </Hidden>
     </div>
   </MuiThemeProvider>
 );
