@@ -1,4 +1,3 @@
-import { hasExpectedRequestMetadata } from "@reduxjs/toolkit/dist/matchers"
 import { DicomTagDefinition } from "./DicomTags"
 import DicomTagValue from "./DicomTagValue"
 
