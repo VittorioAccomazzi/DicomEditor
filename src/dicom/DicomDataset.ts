@@ -38,7 +38,7 @@ export default class DicomDataset {
     }
 
     public write() {
-        return this.dataset.write() as ArrayBuffer
+        return this.dataset.write({allowInvalidVRLength: true}) as ArrayBuffer
     }
 
     private getDict(tag:string) : any {

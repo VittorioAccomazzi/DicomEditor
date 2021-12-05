@@ -4247,10 +4247,10 @@
     "whatwg-mimetype" "^2.3.0"
     "whatwg-url" "^8.0.0"
 
-"dcmjs@^0.18.11":
-  "integrity" "sha512-7C+tKWIzeo2ZzL1Fss+3HuztWyhZYWhQGXV5hrK7yi4s8ctIN0lCeTUNYPdRS1DyE2GEAI7gb9fDcQU9Wh1rgg=="
-  "resolved" "https://registry.npmjs.org/dcmjs/-/dcmjs-0.18.11.tgz"
-  "version" "0.18.11"
+"dcmjs@^0.19.1":
+  "integrity" "sha512-yCqccv0OwnteryNEcloXwKsY6RpQJNvSdsQPHhmggKxBb9w1uFwkBM9j3MboW4+xLL9JTm/q0+rhLS1WOjJSiA=="
+  "resolved" "https://registry.npmjs.org/dcmjs/-/dcmjs-0.19.1.tgz"
+  "version" "0.19.1"
   dependencies:
     "@babel/polyfill" "^7.8.3"
     "@babel/runtime" "^7.8.4"
