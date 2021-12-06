@@ -1,8 +1,8 @@
 import React from 'react'
-import Typography from "@material-ui/core/Typography";
 import { SeriesInfo } from '../../../dicom/DicomEditor';
-import useStyle from '../../../AppStyle';
 import TagList from './tagList'
+import VList from '../../../components/vList';
+import Image from './image'
 
 
 interface SeriesProp {
@@ -10,12 +10,13 @@ interface SeriesProp {
 }
 
 export default function Series({series}:SeriesProp) {
-    const classes = useStyle()
     return (
-        <TagList tags={series.tags} subItemText='Number of Files:' subItemNum={series.files.length}>
-            <Typography color='primary' className={`${classes.smallText} ${classes.leftMargin}`} style={{textAlign:'left'}} >
-                {series.files.map((f,i)=>`${i>0 ? ', ': ''}${f.name}`)} 
-            </Typography>
+        <TagList tags={series.tags} subItemText='Number of Images:' subItemNum={series.images.reduce((s,i)=>s+i.files.length,0)}>
+            <VList left={8} right={8} >
+            {
+                series.images.map((image,i) => <Image image={image} key={i} />)
+            }
+            </VList>
         </TagList>
     )
 }

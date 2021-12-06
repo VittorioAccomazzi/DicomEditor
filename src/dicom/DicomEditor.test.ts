@@ -1,7 +1,7 @@
 import { FileWithPath } from "file-selector";
 import DicomEditor, { ProcessStages, Progress } from "./DicomEditor";
 import * as fs from 'fs'
-import { foreachSeries, numberOfFiles } from "../common/utils";
+import { foreachImage, numberOfFiles } from "../common/utils";
 import  { PathCT0, PathCT1, PathMR } from "../common/testUtils";
 import JSZip from "jszip";
 
@@ -79,8 +79,8 @@ describe('DicomFilter', ()=>{
         expect(dcmInfo.patients.length).toBe(2)
         expect(dcmInfo.patients[0].studies.length).toEqual(1)
         expect(dcmInfo.patients[1].studies.length).toEqual(1)  
-        expect(dcmInfo.patients[0].studies[0].series[0].files).toEqual([CT0,CT1])
-        expect(dcmInfo.patients[1].studies[0].series[0].files).toEqual([MR])
+        expect(dcmInfo.patients[0].studies[0].series[0].images[0].files).toEqual([CT0,CT1])
+        expect(dcmInfo.patients[1].studies[0].series[0].images[0].files).toEqual([MR])
         expect(callbackInvoked).toBe(3)
 
         const patientTg = '00100010'

@@ -1,7 +1,7 @@
 import { FileWithPath } from "file-selector";
-import { fixDigit, foreachSeries, numberOfFiles } from "../common/utils";
+import { fixDigit, foreachImage, numberOfFiles } from "../common/utils";
 import DicomTagList from "./DicomTagList";
-import PatientTags, { SeriesTags, StudyTags } from "./DicomTags";
+import PatientTags, { ImageTags, SeriesTags, StudyTags } from "./DicomTags";
 import DicomDataset from "./DicomDataset";
 import DicomUidReplacer from "./DicomUIDReplacer";
 import JSZip from "jszip";
@@ -10,9 +10,13 @@ export interface Progress {
     done : number,
     total: number
 }
+export interface ImageInfo {
+    tags: DicomTagList,
+    files : FileWithPath []
+}
 export interface SeriesInfo {
     tags : DicomTagList,
-    files: FileWithPath []
+    images: ImageInfo[]
 }
 export interface StudyInfo {
     tags : DicomTagList,
@@ -54,7 +58,8 @@ export default class DicomEditor {
                 const pat = new DicomTagList(dcm, PatientTags)
                 const stu = new DicomTagList(dcm, StudyTags)
                 const ser = new DicomTagList(dcm, SeriesTags)
-                this.add(patients, pat, stu, ser, files[f])
+                const img = new DicomTagList(dcm, ImageTags)
+                this.add(patients, pat, stu, ser, img, files[f])
             }
             progress({ done:f+1, total:files.length})
         }
@@ -73,14 +78,15 @@ export default class DicomEditor {
         const repUID= new DicomUidReplacer()
         const total = numberOfFiles(info.patients)
         let count=0
-        for( const {patient, study, series, patIndex, stuIndex, serindex } of foreachSeries(info.patients)){
+        for( const {patient, study, series, image, patIndex, stuIndex, serindex } of foreachImage(info.patients)){
             let imgIndex =0
-            for( const file of series.files) {
+            for( const file of image.files) {
                 const data = await this.readFile(file)
                 const dcm  = new DicomDataset(data);
                 patient.tags.Modify(dcm)
                 study.tags.Modify(dcm)
                 series.tags.Modify(dcm)
+                image.tags.Modify(dcm)
                 if( replaceUID ) DicomEditor.replaceUIDs(dcm, repUID);
                 imgIndex++
                 const outB = dcm.write()
@@ -112,7 +118,7 @@ export default class DicomEditor {
         dcm.set(mediaStUIDTag, newUIDs.instanceUID )
     }
 
-    private static add( patients : PatientInfo[], pat : DicomTagList, stu : DicomTagList, ser : DicomTagList,  file : FileWithPath  ){
+    private static add( patients : PatientInfo[], pat : DicomTagList, stu : DicomTagList, ser : DicomTagList, img: DicomTagList, file : FileWithPath  ){
         let patient = patients.find(p=>p.tags.isEqual(pat))
         if( !patient ){
             patient = { tags : pat, studies : [] }
@@ -129,11 +135,18 @@ export default class DicomEditor {
 
         let series=study.series.find(s=>s.tags.isEqual(ser))
         if(!series){
-            series = {tags:ser, files:[]}
+            series = {tags:ser, images:[]}
             study.series.push(series)
         }
-        series.files.push(file)
         series.tags.Merge(ser)
+
+        let image = series.images.find(i=>i.tags.isEqual(img))
+        if(!image) {
+            image = {tags:img, files: []}
+            series.images.push(image)
+        }
+        image.tags.Merge(img)
+        image.files.push(file)
     }
 
     private static async  readFile ( file : FileWithPath ) : Promise<ArrayBuffer> {

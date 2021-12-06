@@ -1,25 +1,30 @@
-import { PatientInfo, SeriesInfo, StudyInfo } from "../dicom/DicomEditor"
+import { ImageInfo, PatientInfo, SeriesInfo, StudyInfo } from "../dicom/DicomEditor"
 
 export default async function wait(ms:number) : Promise<void> {
     return new Promise((res)=>{ setTimeout(res,ms)  })
 }
 
 export interface DicomHierarchy {
-    patient : PatientInfo,
+    patient  : PatientInfo,
     study    : StudyInfo,
-    series : SeriesInfo,
+    series   : SeriesInfo,
+    image    : ImageInfo
     patIndex : number,
     stuIndex : number,
-    serindex : number
+    serindex : number,
+    imgIndex : number
 }
-export function *foreachSeries(patients: PatientInfo []):Generator<DicomHierarchy> {
+export function *foreachImage(patients: PatientInfo []):Generator<DicomHierarchy> {
     for( const patient of patients){
         const patIndex = patients.indexOf(patient)
         for( const study of patient.studies ){
             const stuIndex = patient.studies.indexOf(study)
             for( const series of study.series ){
                 const serindex = study.series.indexOf(series)
-                yield {patient,study,series,patIndex,stuIndex,serindex}
+                for( const image of series.images ){
+                    const imgIndex = series.images.indexOf(image)
+                    yield {patient,study,series,image, patIndex,stuIndex,serindex,imgIndex}
+                }
             }
         }
     }
@@ -27,8 +32,8 @@ export function *foreachSeries(patients: PatientInfo []):Generator<DicomHierarch
 
 export function numberOfFiles( patients : PatientInfo []) : number {
     let num =0;
-    for( const {series} of foreachSeries(patients)) {
-        num += series.files.length
+    for( const {image} of foreachImage(patients)) {
+        num += image.files.length
     }
     return num
 }
