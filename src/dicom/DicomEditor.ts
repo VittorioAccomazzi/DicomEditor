@@ -78,21 +78,23 @@ export default class DicomEditor {
         const repUID= new DicomUidReplacer()
         const total = numberOfFiles(info.patients)
         let count=0
-        for( const {patient, study, series, image, patIndex, stuIndex, serindex } of foreachImage(info.patients)){
+        for( const {patient, study, series, patIndex, stuIndex, serindex } of foreachImage(info.patients)){
             let imgIndex =0
-            for( const file of image.files) {
-                const data = await this.readFile(file)
-                const dcm  = new DicomDataset(data);
-                patient.tags.Modify(dcm)
-                study.tags.Modify(dcm)
-                series.tags.Modify(dcm)
-                image.tags.Modify(dcm)
-                if( replaceUID ) DicomEditor.replaceUIDs(dcm, repUID);
-                imgIndex++
-                const outB = dcm.write()
-                const filename = this.imageFilename(patIndex, stuIndex, serindex, imgIndex)
-                zip.file(filename, outB, {binary:true,createFolders:true})
-                await progress( 'processing', {total, done:++count})
+            for( const image of series.images ){
+                for( const file of image.files) {
+                    const data = await this.readFile(file)
+                    const dcm  = new DicomDataset(data);
+                    patient.tags.Modify(dcm)
+                    study.tags.Modify(dcm)
+                    series.tags.Modify(dcm)
+                    image.tags.Modify(dcm)
+                    if( replaceUID ) DicomEditor.replaceUIDs(dcm, repUID);
+                    imgIndex++
+                    const outB = dcm.write()
+                    const filename = this.imageFilename(patIndex, stuIndex, serindex, imgIndex)
+                    zip.file(filename, outB, {binary:true,createFolders:true})
+                    await progress( 'processing', {total, done:++count})
+                }
             }
         }
         const zipFile = await zip.generateAsync({type:'arraybuffer'},(meta)=>{

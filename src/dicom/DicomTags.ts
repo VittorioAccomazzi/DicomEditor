@@ -319,8 +319,7 @@ export const SeriesTags : DicomTagDefinition[] = [
 export const ImageTags : DicomTagDefinition [] = [
     {
         name : "Image Type",
-        tag : "00080008",
-        compare: true
+        tag : "00080008"
     },
     {
         name : "Acquisition Date",
@@ -344,167 +343,131 @@ export const ImageTags : DicomTagDefinition [] = [
     },
     {
         name : "Irradiation Event UID",
-        tag : "00083010",
-        compare: true
+        tag : "00083010"
     },
     {
         name : "Acquisition Number",
-        tag : "00200012",
-        compare: true
+        tag : "00200012"
     },
     {
         name : "Patient Orientation",
-        tag : "00200020",
-        compare: true
+        tag : "00200020"
     },
     {
         name : "Image Laterality",
-        tag : "00200062",
-        compare: true
+        tag : "00200062"
     },
     {
         name : "Images in Acquisition",
-        tag : "00201002",
-        compare: true
+        tag : "00201002"
     },
     {
         name : "Image Comments",
-        tag : "00204000",
-        compare: true
+        tag : "00204000"
     },
     {
         name : "Quality Control Image",
-        tag : "00280300",
-        compare: true
+        tag : "00280300"
     },
     {
         name : "Burned In Annotation",
-        tag : "0028,0301",
-        compare: true
+        tag : "0028,0301"
     },
     {
         name : "Recognizable Visual Features",
         tag : "0028,0302",
-        compare: true,
         enumeratedValues: ["YES","NO"]
     },
     {
         name : "Lossy Image Compression",
         tag : "0028,2110",
-        compare: true,
         enumeratedValues: ["00","01"]
     },
     {
         name : "Lossy Image Compression Ratio",
-        tag : "00282112",
-        compare: true
+        tag : "00282112"
     },
     {
         name : "Lossy Image Compression Method",
-        tag : "00282114",
-        compare: true
+        tag : "00282114"
     },
     {
         name : "Presentation LUT Shape",
         tag : "20500020",
-        compare: true,
         enumeratedValues:["IDENTITY","INVERSE"]
     },
     {
         name : "Samples per Pixel",
-        tag : "00280002",
-        compare: true
+        tag : "00280002"
     },
     {
         name : "Photometric Interpretation",
         tag : "00280004",
-        compare: true,
         enumeratedValues:["MONOCHROME1","MONOCHROME2","PALETTE COLOR","RGB","HSV","ARGB","CMYK","YBR_FULL","YBR_FULL_422","YBR_PARTIAL_422","YBR_PARTIAL_420","YBR_ICT","YBR_RCT"]
     },
     {
         name : "Planar Configuration",
-        tag : "00280006",
-        compare: true
+        tag : "00280006"
     },
     {
         name : "Rows",
-        tag : "00280010",
-        compare: true
+        tag : "00280010"
     },
     {
         name : "Columns",
-        tag : "00280011",
-        compare: true
+        tag : "00280011"
     },
     {
         name : "Pixel Aspect Ratio",
-        tag : "00280034",
-        compare: true
+        tag : "00280034"
     },
     {
         name : "Bits Allocated",
-        tag : "00280100",
-        compare: true
+        tag : "00280100"
     },
     {
         name : "Bits Stored",
-        tag : "00280101",
-        compare: true
+        tag : "00280101"
     },
     {
         name : "High Bit",
-        tag : "00280102",
-        compare: true
+        tag : "00280102"
     },
     {
         name : "Pixel Representation",
-        tag : "00280103",
-        compare: true
+        tag : "00280103"
     },
     {
         name : "Smallest Image Pixel Value",
         tag : "00280106",
-        compare: true
     },
     {
         name : "Largest Image Pixel Value",
-        tag : "00280107",
-        compare: true
+        tag : "00280107"
     },
     {
         name : "Pixel Padding Range",
-        tag : "00280121",
-        compare: true
+        tag : "00280121"
     },
     {
         name : "Red Palette Color Lookup Table Descriptor",
-        tag : "00281101",
-        compare: true
+        tag : "00281101"
     },
     {
         name : "Green Palette Color Lookup Table Descriptor",
-        tag : "00281102",
-        compare: true
+        tag : "00281102"
     },
     {
         name : "Blue Palette Color Lookup Table Descriptor",
-        tag : "00281103",
-        compare: true
+        tag : "00281103"
     },
     {
         name : "Color Space",
-        tag : "00282002",
-        compare: true
+        tag : "00282002"
     },
     {
         name : "Pixel Data Provider URL",
-        tag : "00287FE0",
-        compare: true
-    },
-    {
-        name : "",
-        tag : "",
-        compare: true
+        tag : "00287FE0"
     }
 
 ]
