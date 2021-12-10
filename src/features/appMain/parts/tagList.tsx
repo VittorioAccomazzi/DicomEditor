@@ -23,7 +23,7 @@ export default function TagList({tags, subItemText, subItemNum, children,avatarT
     return (
         <Paper elevation={2} className={`${classes.paper} ${classes.topBottomPadding}, ${classes.topBottomMarging}`} >
             <Box sx={{  display: 'flex', width: '100%', alignItems: 'flex-start',  marginTop:'8px', marginLeft:'8px' }}>
-                <Avatar className={`${avatarColor}`}>{avatarText}</Avatar>
+                <Avatar style={{backgroundColor:`${avatarColor}`}}>{avatarText}</Avatar>
                 <VList left={8} right={8} bottom={0}>
                     <Grid container spacing={1}>
                         { tags.valueList.filter(v=>!v.isHidden).map ((v,index) => (

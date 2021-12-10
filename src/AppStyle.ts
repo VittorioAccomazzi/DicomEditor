@@ -1,6 +1,5 @@
 
 import { makeStyles } from '@material-ui/core/styles';
-import { blue } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -44,19 +43,27 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
-    },
-    avatarPatient : {
-        backgroundColor:blue[500]
-    },
-    avatarStudy : {
-        backgroundColor:blue[400]
-    },
-    avatarSeries : {
-        backgroundColor:blue[300]
-    },
-    avatarImage : {
-        backgroundColor:blue[200]
     }
 }))
+
+export const patAvatar = {
+    name : "Pat",
+    color: "#2196f3"
+}
+
+export const stuAvatar = {
+    name : "Stu",
+    color: "#42a5f5"  
+}
+
+export const serAvatar = {
+    name : "Ser",
+    color: "#64b5f6"  
+}
+
+export const imgAvatar = {
+    name : "Img",
+    color: "#90caf9"  
+}
 
 export default useStyles;
