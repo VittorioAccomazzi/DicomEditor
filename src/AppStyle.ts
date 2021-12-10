@@ -6,11 +6,6 @@ const useStyles = makeStyles((theme) => ({
     paper: {
         width:'100%'
     },
-    avatar: {
-        backgroundColor: blue[500],
-        width: theme.spacing(4),
-        height: theme.spacing(4),
-      },
     boldtext: {
         fontWeight:'bolder', 
         marginLeft: theme.spacing(1),
@@ -49,6 +44,18 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
+    },
+    avatarPatient : {
+        backgroundColor:blue[500]
+    },
+    avatarStudy : {
+        backgroundColor:blue[400]
+    },
+    avatarSeries : {
+        backgroundColor:blue[300]
+    },
+    avatarImage : {
+        backgroundColor:blue[200]
     }
 }))
 

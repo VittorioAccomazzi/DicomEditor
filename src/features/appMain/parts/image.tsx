@@ -12,7 +12,7 @@ interface ImageProp {
 export default function Series({image}:ImageProp) {
     const classes = useStyle()
     return (
-        <TagList tags={image.tags} subItemText='Number of Files:' subItemNum={image.files.length}>
+        <TagList tags={image.tags} subItemText='Number of Files:' subItemNum={image.files.length} avatarColor={`${classes.avatarImage}`} avatarText='Img'>
             <Typography color='primary' className={`${classes.smallText} ${classes.leftMargin}`} style={{textAlign:'left'}} >
                 {image.files.map((f,i)=>`${i>0 ? ', ': ''}${f.name}`)} 
             </Typography>
