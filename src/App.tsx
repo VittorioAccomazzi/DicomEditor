@@ -32,7 +32,7 @@ const theme = createTheme({
 const styles: (theme: Theme) => StyleRules<string> = theme =>
   createStyles({
     app: {
-      textAlign: "center" 
+      textAlign: "center"
     },
     main :{
       position:'absolute',
@@ -43,7 +43,7 @@ const styles: (theme: Theme) => StyleRules<string> = theme =>
       background : 'white',
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center',
+      alignItems: 'center'
     }
   });
 

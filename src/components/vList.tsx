@@ -15,7 +15,7 @@ export default function VList({left, right, top, bottom, children}:VListProps) {
     left   = left ?? 0
     right  = right ?? 0
     return (
-        <Box sx={{display: 'flex', marginLeft: `${left}px`, marginRight: `${right}px`, marginTop:`${top}px`, marginBottom: `${bottom}px`, flexDirection:'column', alignItems: 'flexend', justifyContent:'center'}}>
+        <Box sx={{display: 'flex', paddingLeft: `${left}px`, paddingRight: `${right}px`, paddingTop:`${top}px`, paddingBottom: `${bottom}px`, flexDirection:'column', alignItems: 'flexend', justifyContent:'center', width:'100%', boxSizing:'border-box'}}>
             {children}
         </Box>
     )
