@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "/DicomEditor/static/js/main.cc7288cd.chunk.js",
-    "main.js.map": "/DicomEditor/static/js/main.cc7288cd.chunk.js.map",
+    "main.js": "/DicomEditor/static/js/main.64013b62.chunk.js",
+    "main.js.map": "/DicomEditor/static/js/main.64013b62.chunk.js.map",
     "runtime-main.js": "/DicomEditor/static/js/runtime-main.2aa92d90.js",
     "runtime-main.js.map": "/DicomEditor/static/js/runtime-main.2aa92d90.js.map",
     "static/js/2.81c8acdb.chunk.js": "/DicomEditor/static/js/2.81c8acdb.chunk.js",
@@ -12,6 +12,6 @@
   "entrypoints": [
     "static/js/runtime-main.2aa92d90.js",
     "static/js/2.81c8acdb.chunk.js",
-    "static/js/main.cc7288cd.chunk.js"
+    "static/js/main.64013b62.chunk.js"
   ]
 }
